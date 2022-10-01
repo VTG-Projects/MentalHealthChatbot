@@ -17,6 +17,7 @@ from nltk.stem import WordNetLemmatizer
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Dropout
 from tensorflow.keras.optimizers import SGD
+from keras.models import model_from_json
 
 lemmatizer = WordNetLemmatizer()
 
@@ -75,4 +76,11 @@ model.compile (loss = 'categorical_crossentropy', optimizer = sgd, metrics = ['a
 
 history = model.fit (np.array (train_x), np.array (train_y), epochs = 200, batch_size = 5, verbose = 1 )
 model.save ('chatbot.h5', history)
+
+json_model = model.to_json()                     #save the model architecture to JSON file
+with open('config.json', 'w') as json_file:
+    json_file.write(json_model)                  #saving the weights of the model
+model.save_weights('weights.h5')                 #Model loss and accuracy
+#loss,acc = model.evaluate(test_images,  test_labels, verbose=2)
+
 print('Training Completed')
